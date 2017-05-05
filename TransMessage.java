@@ -10,3 +10,4 @@ public class TransMessage
 			this.amount = amount;
 	}
 }
+
