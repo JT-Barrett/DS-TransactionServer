@@ -32,10 +32,10 @@ public class TransactionServer
     //wait for messages and send them to threads as they come in
     Socket server = new Socket("127.0.0.1", 27465);
     while(true){
-      ObjectInputStream readFromNet = new ObjectInputStream(client.getInputStream());
+      ObjectInputStream readFromNet = new ObjectInputStream(client.getInputStream()); // what is client??
       TransMessage msg = (TransMessage) readFromNet.readObject();
 
-      Runnable r = new transThread(msg.accountName, msg.type, msg.amount);
+      Runnable r = new transThread(msg.accountName, msg.type, msg.amount); // cannot find method transThread...??
       new Thread(r).start();
     }
 
@@ -52,7 +52,7 @@ public class TransactionServer
 
        public void run() {
           //create a new transaction object
-          TransID trans = new TransID(id);
+          TransID trans = new TransID(id); // id is not defined ??
           Account acc = Bigbranch.lookUp(this.accountName);
           LockType lockt = new LockType("READ");
 
@@ -82,3 +82,4 @@ public class TransactionServer
     }
   }
 }
+
