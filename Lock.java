@@ -4,17 +4,17 @@ import java.util.*;
 
 public class Lock
 {
-	private Object object;
+	private Account account;
 	// the object being protected by the lock
 	private Vector holders;
 	// the TIDs of current hol	ders
 	private LockType lockType;
 	// the current type
-	public void setObject (Object newObj){
-		this.object = newObj;
+	public void setObject (Account newObj){
+		this.account = newObj;
 	}
-	public Object getObject (){
-		return this.object;
+	public Account getObject (){
+		return this.account;
 	}
 
 	public synchronized void acquire(TransID trans, LockType aLockType )

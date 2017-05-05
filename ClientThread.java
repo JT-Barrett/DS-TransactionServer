@@ -8,33 +8,35 @@ public class ClientThread extends Thread {
 
   public void run(){
     String[] accountNames = {"Jessie", "George", "Otte", "Palmer", "Jacobs", "Doerry", "Maggie", "Bill", "Steve", "Samantha"};
-    String host = "127.0.0.1";
-    int port = 23657;
 
     //set up random account and random
     int accountIndex = randInt(0, accountNames.length - 1);
     int randAmmount = randInt(0, 50);
-
-    try {
-        Socket server = new Socket(host, port);
+    Socket server = null;
+    try{
+      server = new Socket("127.0.0.1", 23657);
     } catch (Exception e) {
-        System.out.println("Error on connecting socket: " + e);
+      System.out.println("could not connect socket to server");
     }
-
     // create job and job request message
-    TransMessage msg = new TransMessage(accountNames[accountIndex], "withdrawl", randAmmount);
 
-    // sending withdrawl out to the transaction server in a message
-    ObjectOutputStream writeToNet = new ObjectOutputStream(server.getOutputStream());
-    writeToNet.writeObject(msg);
+    try{
+      TransMessage msg = new TransMessage(accountNames[accountIndex], "withdrawl", randAmmount);
 
-    accountIndex = randInt(0, 9);
-    // create job and job request message
-    msg = new TransMessage(accountNames[accountIndex], "deposit", randAmmount);
+      // sending withdrawl out to the transaction server in a message
+      ObjectOutputStream writeToNet = new ObjectOutputStream(server.getOutputStream());
+      writeToNet.writeObject(msg);
 
-    // sending deposit out to the transaction server in a message
-    writeToNet = new ObjectOutputStream(server.getOutputStream());
-    writeToNet.writeObject(msg);
+      accountIndex = randInt(0, 9);
+      // create job and job request message
+      msg = new TransMessage(accountNames[accountIndex], "deposit", randAmmount);
+
+      // sending deposit out to the transaction server in a message
+      writeToNet = new ObjectOutputStream(server.getOutputStream());
+      writeToNet.writeObject(msg);
+    } catch (Exception e) {
+      System.out.println("could not send messages through socket");
+    }
 
      //close the thread by returning
      return;
@@ -49,5 +51,3 @@ public class ClientThread extends Thread {
     return randomNum;
   }
 }
-
-

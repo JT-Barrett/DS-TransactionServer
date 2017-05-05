@@ -8,78 +8,45 @@ import java.util.*;
 
 public class TransactionServer
 {
-  int transaction = 0;
+  static int transaction = 0;
 
   public static void main(String [] args)
   {
-    Branch Bigbranch = new Branch();
-    Bigbranch.create("Jessie", 10);
-    Bigbranch.create("George", 10);
-    Bigbranch.create("Otte", 10);
-    Bigbranch.create("Palmer", 10);
-    Bigbranch.create("Jacobs", 10);
-    Bigbranch.create("Doerry", 10);
-    Bigbranch.create("Maggie", 10);
-    Bigbranch.create("Bill", 10);
-    Bigbranch.create("Steve", 10);
-    Bigbranch.create("Samantha", 10);
+    Branch bigbranch = new Branch();
+    bigbranch.create("Jessie", 10);
+    bigbranch.create("George", 10);
+    bigbranch.create("Otte", 10);
+    bigbranch.create("Palmer", 10);
+    bigbranch.create("Jacobs", 10);
+    bigbranch.create("Doerry", 10);
+    bigbranch.create("Maggie", 10);
+    bigbranch.create("Bill", 10);
+    bigbranch.create("Steve", 10);
+    bigbranch.create("Samantha", 10);
 
-    Hashtable<Object, Lock> accountLocks = new Hashtable<Object, Lock>();
+    Hashtable<Account, Lock> accountLocks = new Hashtable<Account, Lock>();
     LockManager accountLockManager = new LockManager(accountLocks);
 
     System.out.println("Accounts initiated. Waiting for transaction requests...");
 
     //wait for messages and send them to threads as they come in
-    Socket server = new Socket("127.0.0.1", 27465);
-    while(true){
-      ObjectInputStream readFromNet = new ObjectInputStream(client.getInputStream()); // what is client??
-      TransMessage msg = (TransMessage) readFromNet.readObject();
-
-      Runnable r = new transThread(msg.accountName, msg.type, msg.amount); // cannot find method transThread...??
-      new Thread(r).start();
+    Socket client = null;
+    TransMessage msg = null;
+    try{
+      client = new Socket("127.0.0.1", 23657);
+    } catch (Exception e) {
+      System.out.println("could not connect socket to client");
     }
+    while(true){
+      try {
+      ObjectInputStream readFromNet = new ObjectInputStream(client.getInputStream());
+      msg = (TransMessage) readFromNet.readObject();
+      } catch(Exception e) {
+        System.out.println("Server could not receive anything from the socket.");
+      }
 
-    class transThread implements Runnable {
-       public String accountName;
-       public String type;
-       public int amount;
-
-       public transThread(String accountName, String type, int amount) {
-           this.accountName = accountName;
-           this.type = type;
-           this.amount = amount;
-       }
-
-       public void run() {
-          //create a new transaction object
-          TransID trans = new TransID(id); // id is not defined ??
-          Account acc = Bigbranch.lookUp(this.accountName);
-          LockType lockt = new LockType("READ");
-
-          //read lock account and get balance
-          accountLockManager.setLock(acc, trans, lockt);
-          balance = acc.getBalance();
-          accountLockManager.unLock(trans);
-
-          //write lock account and perform the transaction
-          lockt = new LockType("WRITE");
-          //if it's a deposit, add, if it's a withdrawl, subtract
-          if(this.type == "deposit")
-          {
-            accountLockManager.setLock(acc, trans, lockt);
-            acc.setBalance( balance + this.amount);
-            accountLockManager.unLock(trans);
-            System.out.println("TransID: " + trans.id + " deposited $" + this.amount + " into account '" + this.accountName + "'");
-          } else {
-            accountLockManager.setLock(acc, trans, lockt);
-            acc.setBalance( balance - this.amount);
-            accountLockManager.unLock(trans);
-            System.out.println("TransID: " + trans.id + " withdrew $" + this.amount + " from account '" + this.accountName + "'");
-          }
-          //remove reference to object to delete it
-          trans = null;
-       }
+      TransThread r = new TransThread(msg.getAccountName(), msg.getType(), msg.getAmount(), accountLockManager, bigbranch, transaction++);
+      new Thread(r).start();
     }
   }
 }
-

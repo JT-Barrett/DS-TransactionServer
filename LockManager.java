@@ -1,16 +1,17 @@
 // From Textbook, completed by JT Barrett and David Miller
 import java.lang.Integer;
 import java.util.*;
+import java.util.Map;
 
 public class LockManager
 {
-	private Hashtable <Object, Lock> theLocks;
+	private Hashtable <Account, Lock> theLocks;
 
-	public LockManager (Hashtable <Object, Lock> hash){
+	public LockManager (Hashtable <Account, Lock> hash){
 		this.theLocks = hash;
 	}
 
-	public void setLock(Object object, TransID trans, LockType lockType)
+	public void setLock(Account object, TransID trans, LockType lockType)
 	{
 		Lock foundLock;
 		synchronized(this)
@@ -43,17 +44,8 @@ public class LockManager
 		}
 	}
 
-    public Lock searchHashTableForLock(Object obj)
-    {
-        for (Object object2: theLocks.entrySet()){
-            // make a reference to the object as a map entry
-            Map.Entry entry = (Map.Entry) obj;
-            if(entry.getKey().equals(obj))
-            {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
+	public Lock searchHashTableForLock(Account acc){
+			return theLocks.get(acc);
+	}
 
 }
