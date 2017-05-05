@@ -6,13 +6,13 @@ public class Lock
 	private Object object;
 	// the object being protected by the lock
 	private Vector holders;
-	// the TIDs of current holders
+	// the TIDs of current hol	ders
 	private LockType lockType;
 	// the current type
-	public setObject (Object newObj){
+	public void setObject (Object newObj){
 		this.object = newObj;
 	}
-	public getObject (){
+	public Object getObject (){
 		return this.object;
 	}
 
@@ -32,29 +32,29 @@ public class Lock
 
 			if(waiting)
 			{
-				System.out.println("TransID: " + trans.id + " || waiting for lock access.")
+				System.out.println("TransID: " + trans.id + " || waiting for lock access.");
 				waiting = false;
 			}
 		}
-		System.out.println("\n===========================\nTransID: " + trans.id + " || free to proceed.")
+		System.out.println("TransID: " + trans.id + " || free to proceed.");
 		if (holders.isEmpty())
 		{
 			// no TIDs hold lock
 			holders.addElement(trans);
 			lockType  = aLockType;
-			System.out.println("TransID: " + trans.id + " || aquired " + aLockType.getType() + " lock: No other TIDs present.\n===========================\n")
+			System.out.println("TransID: " + trans.id + " || aquired " + aLockType.getType() + " lock: No other TIDs present.");
 		}
 		else if (!holders.isEmpty() && !isHolder(trans))
 		{
 				holders.addElement(trans);
-				System.out.println("TransID: " + trans.id + " || aquired " + aLockType.getType() + " lock: Lock shared.\n===========================\n")
+				System.out.println("TransID: " + trans.id + " || aquired " + aLockType.getType() + " lock: Lock shared.");
 		}
 
 		/* this transaction is a holder but needs amore exclusive lock*/
 		else if (isHolder(trans) && aLockType.getType() == "WRITE")
 		{
 			lockType.promote();
-			System.out.println("TransID: " + trans.id + " || aquired " + aLockType.getType() + " lock: Lock promoted.\n===========================\n")
+			System.out.println("TransID: " + trans.id + " || aquired " + aLockType.getType() + " lock: Lock promoted.");
 		}
 	}
 

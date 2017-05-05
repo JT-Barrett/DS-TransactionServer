@@ -10,12 +10,12 @@ public class LockType
 		return this.type;
 	}
 
-  public setType(String newType)
+  public void setType(String newType)
   {
     this.type = newType;
   }
 
-  public promote(){
+  public void promote(){
     if(this.type == "READ"){
       this.type = "WRITE";
     }

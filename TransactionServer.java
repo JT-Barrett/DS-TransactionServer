@@ -25,25 +25,24 @@ public class TransactionServer
 
     Hashtable<Object, Lock> accountLocks = new Hashtable<Object, Lock>();
     LockManager accountLockManager = new LockManager(accountLocks);
-    Coordinator coord = new Coordinator;
 
     System.out.println("Accounts initiated. Waiting for transaction requests...");
 
-    //to do: wait for messages and assign them to threads as they come in
+    //wait for messages and send them to threads as they come in
     while(1){
       readFromNet = new ObjectInputStream(client.getInputStream());
       msg = (TransMessage) readFromNet.readObject();
 
-      Runnable r = new MyThread(msg.accountName, msg.type, msg.amount);
+      Runnable r = new transThread(msg.accountName, msg.type, msg.amount);
       new Thread(r).start();
     }
 
-    public class MyThread implements Runnable {
+    class transThread implements Runnable {
        public String accountName;
        public String type;
        public int amount;
 
-       public MyThread(String accountName, String type, int amount) {
+       public transThread(String accountName, String type, int amount) {
            this.accountName = accountName;
            this.type = type;
            this.amount = amount;
@@ -68,10 +67,12 @@ public class TransactionServer
             accountLockManager.setLock(acc, trans, lockt);
             acc.setBalance( balance + this.amount);
             accountLockManager.unLock(trans);
+            System.out.println("TransID: " + trans.id + " deposited $" + this.amount + " into account '" + this.accountName + "'");
           } else {
             accountLockManager.setLock(acc, trans, lockt);
             acc.setBalance( balance - this.amount);
             accountLockManager.unLock(trans);
+            System.out.println("TransID: " + trans.id + " withdrew $" + this.amount + " from account '" + this.accountName + "'");
           }
           //remove reference to object to delete it
           trans = null;

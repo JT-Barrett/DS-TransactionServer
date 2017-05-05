@@ -10,8 +10,8 @@ public class Branch
 
 	}
 	public Account lookUp(String name)
-	{
-		forEach(Account account)
+		{
+		for(Account account : accounts)
 		{
 			if (account.name == name)
 			{

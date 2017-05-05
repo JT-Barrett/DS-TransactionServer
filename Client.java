@@ -4,7 +4,7 @@ import java.net.Socket;
 
 public class Client
 {
-  String[] accountNames = ["Jessie", "George", "Otte", "Palmer", "Jacobs", "Doerry", "Maggie", "Bill", "Steve", "Samantha"];
+  String[] accountNames = {"Jessie", "George", "Otte", "Palmer", "Jacobs", "Doerry", "Maggie", "Bill", "Steve", "Samantha"};
   public static void main(String [] args)
   {
     for (int i = 0; i < 50; i++)
