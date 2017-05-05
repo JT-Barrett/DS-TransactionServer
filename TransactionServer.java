@@ -1,8 +1,12 @@
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.net.ServerSocket;
 import java.net.Socket;
+
 import java.io.ObjectInputStream;
+
+import java.util.Hashtable;
+import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class TransactionServer
@@ -29,7 +33,10 @@ public class TransactionServer
     System.out.println("Accounts initiated. Waiting for transaction requests...");
 
     //wait for messages and send them to threads as they come in
-    while(1){
+    ObjectInputStream readFromNet;
+    TransMessage msg;
+
+    while(true){
       readFromNet = new ObjectInputStream(client.getInputStream());
       msg = (TransMessage) readFromNet.readObject();
 
@@ -50,7 +57,7 @@ public class TransactionServer
 
        public void run() {
           //create a new transaction object
-          trans = new TransID(id);
+          TransID trans = new TransID(id);
           Account acc = Bigbranch.lookUp(this.accountName);
           LockType lockt = new LockType("READ");
 
