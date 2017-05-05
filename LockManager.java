@@ -1,3 +1,4 @@
+// From Textbook, completed by JT Barrett and David Miller
 public class LockManager
 {
 	private Hashtable theLocks;

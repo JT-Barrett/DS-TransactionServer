@@ -1,3 +1,6 @@
+// From Textbook, completed by JT Barrett and David Miller
+import java.io.*;
+
 public class Lock
 {
 	private Object object;
@@ -16,7 +19,7 @@ public class Lock
 			}
 			catch (InterruptedException e)
 			{
-				/*...*/
+				System.out.println("Caught Exception: " + e.getMessage());
 			}
 		}
 		if (holders.isEmpty())
