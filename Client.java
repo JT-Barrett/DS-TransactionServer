@@ -1,11 +1,11 @@
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Random;
+import java.util.*;
+import java.io.*;
 
 public class Client
 {
-  String[] accountNames = {"Jessie", "George", "Otte", "Palmer", "Jacobs", "Doerry", "Maggie", "Bill", "Steve", "Samantha"};
   public static void main(String [] args)
   {
     for (int i = 0; i < 50; i++)
@@ -14,38 +14,38 @@ public class Client
       newThread.start();
     }
   }
+}
 
-  public class ClientThread extends Thread {
+public class ClientThread extends Thread {
 
-    public void run(){
+  public void run(){
+    String[] accountNames = {"Jessie", "George", "Otte", "Palmer", "Jacobs", "Doerry", "Maggie", "Bill", "Steve", "Samantha"};
+    String host = "127.0.0.1";
+    int port = 23657;
 
-      String host = "127.0.0.1";
-      int port = 23657;
+    //set up random account and random
+    int accountIndex = randInt(0, accountNames.length - 1);
+    int randAmmount = randInt(0, 50);
 
-      //set up random account and random
-      int accountIndex = randInt(0, accountNames.length - 1);
-      int randAmmount = randInt(0, 50);
+    Socket server = new Socket(host, port);
 
-      Socket server = new Socket(host, port);
+    // create job and job request message
+    TransMessage msg = new TransMessage(accountNames[accountIndex], "withdrawl", randAmmount);
 
-      // create job and job request message
-      TransMessage msg = new TransMessage(accountNames[accountIndex], "withdrawl", randAmmount);
+    // sending withdrawl out to the transaction server in a message
+    ObjectOutputStream writeToNet = new ObjectOutputStream(server.getOutputStream());
+    writeToNet.writeObject(msg);
 
-      // sending withdrawl out to the transaction server in a message
-      ObjectOutputStream writeToNet = new ObjectOutputStream(server.getOutputStream());
-      writeToNet.writeObject(msg);
+    accountIndex = randInt(0, 9);
+    // create job and job request message
+    msg = new TransMessage(accountNames[accountIndex], "deposit", randAmmount);
 
-      accountIndex = randInt(0, 9);
-      // create job and job request message
-      msg = new TransMessage(accountNames[accountIndex], "deposit", randAmmount);
+    // sending deposit out to the transaction server in a message
+    writeToNet = new ObjectOutputStream(server.getOutputStream());
+    writeToNet.writeObject(msg);
 
-      // sending deposit out to the transaction server in a message
-      writeToNet = new ObjectOutputStream(server.getOutputStream());
-      writeToNet.writeObject(msg);
-
-       //close the thread by returning
-       return;
-    }
+     //close the thread by returning
+     return;
   }
 
   public static int randInt(int min, int max) {

@@ -1,5 +1,6 @@
 // From Textbook, completed by JT Barrett and David Miller
 import java.io.*;
+import java.util.*;
 
 public class Lock
 {
@@ -30,10 +31,10 @@ public class Lock
 				System.out.println("Caught Exception: " + e.getMessage());
 			}
 
-			if(waiting)
+			if(notWaiting)
 			{
 				System.out.println("TransID: " + trans.id + " || waiting for lock access.");
-				waiting = false;
+				notWaiting = false;
 			}
 		}
 		System.out.println("TransID: " + trans.id + " || free to proceed.");
@@ -70,7 +71,8 @@ public class Lock
 	public synchronized boolean isHolder (TransID trans){
 		for(int i = 0; i < holders.size(); i++ )
 		{
-			if (holders[i].id == trans.id)
+			TransID transTemp = (TransID) holders.get(i);
+			if (transTemp.getID() == trans.id)
 			{
 				return true;
 			}
@@ -85,7 +87,7 @@ public class Lock
 				return true;
 		}
 		//if requesting WRITE, conflict there are lock of any kind
-		else if ( aLockType.getType() = "WRITE" && !holders.isEmpty()){
+		else if ( aLockType.getType() == "WRITE" && !holders.isEmpty()){
 				return true;
 		}
 

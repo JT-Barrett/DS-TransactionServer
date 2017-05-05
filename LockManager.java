@@ -1,6 +1,6 @@
 // From Textbook, completed by JT Barrett and David Miller
 import java.lang.Integer;
-import java.util.Hashtable;
+import java.util.*;
 
 public class LockManager
 {
@@ -23,7 +23,7 @@ public class LockManager
             {
                 foundLock = new Lock();
 								foundLock.setObject(object);
-								theLocks.put(foundLock.getObject, foundLock);
+								theLocks.put(foundLock.getObject(), foundLock);
             }
 		}
 		foundLock.acquire(trans, lockType);
@@ -45,7 +45,7 @@ public class LockManager
 
     public Lock searchHashTableForLock(Object obj)
     {
-        for (Object obj: theLocks.entrySet()){
+        for (Object object2: theLocks.entrySet()){
             // make a reference to the object as a map entry
             Map.Entry entry = (Map.Entry) obj;
             if(entry.getKey().equals(obj))

@@ -1,12 +1,9 @@
-import java.net.ServerSocket;
-import java.net.Socket;
-
-import java.io.ObjectInputStream;
-
-import java.util.Hashtable;
-import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.*;
+import java.util.*;
 
 
 public class TransactionServer
@@ -33,12 +30,10 @@ public class TransactionServer
     System.out.println("Accounts initiated. Waiting for transaction requests...");
 
     //wait for messages and send them to threads as they come in
-    ObjectInputStream readFromNet;
-    TransMessage msg;
-
+    Socket server = new Socket("127.0.0.1", 27465);
     while(true){
-      readFromNet = new ObjectInputStream(client.getInputStream());
-      msg = (TransMessage) readFromNet.readObject();
+      ObjectInputStream readFromNet = new ObjectInputStream(client.getInputStream());
+      TransMessage msg = (TransMessage) readFromNet.readObject();
 
       Runnable r = new transThread(msg.accountName, msg.type, msg.amount);
       new Thread(r).start();
@@ -57,12 +52,12 @@ public class TransactionServer
 
        public void run() {
           //create a new transaction object
-          TransID trans = new TransID(id);
-          Account acc = Bigbranch.lookUp(this.accountName); // somehow this isn't allowed and causing a cascade of other errors??
+          trans = new TransID(id);
+          Account acc = Bigbranch.lookUp(this.accountName);
           LockType lockt = new LockType("READ");
 
           //read lock account and get balance
-          accountLockManager.setLock(acc, trans, lockt); // where is this declared??
+          accountLockManager.setLock(acc, trans, lockt);
           balance = acc.getBalance();
           accountLockManager.unLock(trans);
 

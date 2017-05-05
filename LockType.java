@@ -1,6 +1,6 @@
 public class LockType
 {
-	private final String type;
+	private String type;
 
   public LockType (String type){
     this.type = type;

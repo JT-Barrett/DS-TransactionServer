@@ -4,7 +4,7 @@ public class Branch
 	ArrayList<Account> accounts = new ArrayList<Account>();
 	public Account create(String name, int balance)
 	{
-		Account newAccount = new Account(name);
+		Account newAccount = new Account(name, balance);
 		accounts.add(newAccount);
 		return newAccount;
 
