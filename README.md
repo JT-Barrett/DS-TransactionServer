@@ -12,3 +12,9 @@ $ javac @sources.txt
 > dir /s /B *.java > sources.txt
 
 > javac @sources.txt
+
+
+### to run
+
+$ java -cp . TransactionServer
+$ java -cp . Client
