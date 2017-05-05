@@ -1,3 +1,9 @@
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.*;
+import java.io.*;
+
 public class ClientThread extends Thread {
 
   public void run(){
@@ -9,7 +15,11 @@ public class ClientThread extends Thread {
     int accountIndex = randInt(0, accountNames.length - 1);
     int randAmmount = randInt(0, 50);
 
-    Socket server = new Socket(host, port);
+    try {
+        Socket server = new Socket(host, port);
+    } catch (Exception e) {
+        System.out.println("Error on connecting socket: " + e);
+    }
 
     // create job and job request message
     TransMessage msg = new TransMessage(accountNames[accountIndex], "withdrawl", randAmmount);
