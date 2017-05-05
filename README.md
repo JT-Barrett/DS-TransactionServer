@@ -17,4 +17,5 @@ $ javac @sources.txt
 ### to run
 
 $ java -cp . TransactionServer
+
 $ java -cp . Client
