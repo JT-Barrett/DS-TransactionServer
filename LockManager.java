@@ -4,7 +4,7 @@ import java.util.Hashtable;
 
 public class LockManager
 {
-	private Hashtable <Integer, Lock> theLocks;
+	private Hashtable <Object, Lock> theLocks;
 
 	public void setLock(Object object, TransID trans, LockType lockType)
 	{
@@ -13,14 +13,17 @@ public class LockManager
 		{
             // find the lock associated with object
             foundLock = searchHashTableForLock(object);
-                
+
 			// if there isn’t one, create it and add it to the hashtable
-            if (foundLock == null) 
+            if (foundLock == null)
             {
-                // create lock and add to hash table
+                foundLock = new Lock();
+								foundLock.setObject(object);
+								theLocks.put(foundLock.getObject, foundLock);
             }
 		}
 		foundLock.acquire(trans, lockType);
+
 	}
 	// synchronize this one because we want to remove all entries
 	public synchronized void unLock(TransID trans)
@@ -29,13 +32,13 @@ public class LockManager
 		while(e.hasMoreElements())
 		{
 			Lock aLock = (Lock)(e.nextElement());
-			if(/* trans is a holder of this lock*/)
+			if(aLock.isHolder(trans))
 			{
 				aLock.release(trans);
 			}
 		}
 	}
-    
+
     public Lock searchHashTableForLock(Object obj)
     {
         for (Object obj: theLocks.entrySet()){
@@ -50,4 +53,3 @@ public class LockManager
     }
 
 }
-
