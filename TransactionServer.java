@@ -52,7 +52,7 @@ public class TransactionServer
 
        public void run() {
           //create a new transaction object
-          trans = new TransID(id);
+          TransID trans = new TransID(id);
           Account acc = Bigbranch.lookUp(this.accountName);
           LockType lockt = new LockType("READ");
 
