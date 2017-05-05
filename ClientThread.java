@@ -14,7 +14,7 @@ public class ClientThread extends Thread {
     int randAmmount = randInt(0, 50);
     Socket server = null;
     try{
-      server = new Socket("127.0.0.1", 23657);
+      server = new Socket("localhost", 23657);
     } catch (Exception e) {
       System.out.println("could not connect socket to server");
     }
@@ -22,9 +22,9 @@ public class ClientThread extends Thread {
 
     try{
       TransMessage msg = new TransMessage(accountNames[accountIndex], "withdrawl", randAmmount);
-
       // sending withdrawl out to the transaction server in a message
       ObjectOutputStream writeToNet = new ObjectOutputStream(server.getOutputStream());
+      //error happening here
       writeToNet.writeObject(msg);
 
       accountIndex = randInt(0, 9);
@@ -33,7 +33,9 @@ public class ClientThread extends Thread {
 
       // sending deposit out to the transaction server in a message
       writeToNet = new ObjectOutputStream(server.getOutputStream());
+      System.out.println("hello1");
       writeToNet.writeObject(msg);
+      System.out.println("hello1");
     } catch (Exception e) {
       System.out.println("could not send messages through socket");
     }

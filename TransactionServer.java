@@ -30,10 +30,12 @@ public class TransactionServer
     System.out.println("Accounts initiated. Waiting for transaction requests...");
 
     //wait for messages and send them to threads as they come in
+    ServerSocket server = null;
     Socket client = null;
     TransMessage msg = null;
     try{
-      client = new Socket("127.0.0.1", 23657);
+      server = new ServerSocket(23657);
+      client = server.accept();
     } catch (Exception e) {
       System.out.println("could not connect socket to client");
     }
@@ -44,6 +46,7 @@ public class TransactionServer
       } catch(Exception e) {
         System.out.println("Server could not receive anything from the socket.");
       }
+
 
       TransThread r = new TransThread(msg.getAccountName(), msg.getType(), msg.getAmount(), accountLockManager, bigbranch, transaction++);
       new Thread(r).start();
