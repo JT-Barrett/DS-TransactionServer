@@ -16,10 +16,4 @@ public class Coordinator
 		*/
 		return false;
 	}
-	public void abortTransaction(TransID id)
-	{
-		/*
-			Aborts the transaction
-		*/
-	}
 }

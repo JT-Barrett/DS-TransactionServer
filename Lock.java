@@ -9,6 +9,13 @@ public class Lock
 	// the TIDs of current holders
 	private LockType lockType;
 	// the current type
+	public setObject (Object newObj){
+		this.object = newObj;
+	}
+	public getObject (){
+		return this.object;
+	}
+
 	public synchronized void acquire(TransID trans, LockType aLockType )
 	{
 		boolean notWaiting = true;

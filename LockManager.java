@@ -6,6 +6,10 @@ public class LockManager
 {
 	private Hashtable <Object, Lock> theLocks;
 
+	public LockManager (Hashtable <Object, Lock> hash){
+		this.theLocks = hash;
+	}
+
 	public void setLock(Object object, TransID trans, LockType lockType)
 	{
 		Lock foundLock;
