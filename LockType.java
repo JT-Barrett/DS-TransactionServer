@@ -1,6 +1,10 @@
 public class LockType
 {
 	private final String type;
+
+  public LockType (String type){
+    this.type = type;
+  }
 	public String getType()
 	{
 		return this.type;
