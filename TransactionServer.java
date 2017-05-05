@@ -50,7 +50,8 @@ public class TransactionServer
        }
 
        public void run() {
-          trans = openTransaction(transaction++);
+          //create a new transaction object
+          trans = new TransID(id);
           Account acc = Bigbranch.lookUp(this.accountName);
           LockType lockt = new LockType("READ");
 
@@ -61,6 +62,7 @@ public class TransactionServer
 
           //write lock account and perform the transaction
           lockt = new LockType("WRITE");
+          //if it's a deposit, add, if it's a withdrawl, subtract
           if(this.type == "deposit")
           {
             accountLockManager.setLock(acc, trans, lockt);
@@ -71,7 +73,8 @@ public class TransactionServer
             acc.setBalance( balance - this.amount);
             accountLockManager.unLock(trans);
           }
-          closeTransaction(trans);
+          //remove reference to object to delete it
+          trans = null;
        }
     }
   }
