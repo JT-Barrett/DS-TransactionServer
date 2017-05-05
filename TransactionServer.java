@@ -58,11 +58,11 @@ public class TransactionServer
        public void run() {
           //create a new transaction object
           TransID trans = new TransID(id);
-          Account acc = Bigbranch.lookUp(this.accountName);
+          Account acc = Bigbranch.lookUp(this.accountName); // somehow this isn't allowed and causing a cascade of other errors??
           LockType lockt = new LockType("READ");
 
           //read lock account and get balance
-          accountLockManager.setLock(acc, trans, lockt);
+          accountLockManager.setLock(acc, trans, lockt); // where is this declared??
           balance = acc.getBalance();
           accountLockManager.unLock(trans);
 
